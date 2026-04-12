@@ -1,0 +1,12 @@
+{{- $personal := promptBoolOnce . "personal" "Is this a personal machine" -}}
+{{- $workEmail := "" -}}
+{{- $workSigningKeyItem := "" -}}
+{{- if not $personal -}}
+{{-   $workEmail = promptStringOnce . "work_email" "Work email address" -}}
+{{-   $workSigningKeyItem = promptStringOnce . "work_signing_key_item" "1Password item name for work SSH signing key" -}}
+{{- end -}}
+
+[data]
+  personal = {{ $personal }}
+  work_email = {{ $workEmail | quote }}
+  work_signing_key_item = {{ $workSigningKeyItem | quote }}

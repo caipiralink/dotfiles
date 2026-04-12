@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONTAINER_NAME="dev-debian-trixie"
+IMAGE="debian:trixie"
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+
+cmd_install() {
+  local nvidia=0 cursor=0
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --nvidia) nvidia=1; shift ;;
+      --cursor) cursor=1; shift ;;
+      *) echo "Unknown flag: $1"; exit 1 ;;
+    esac
+  done
+
+  local flags=(
+    --image "$IMAGE"
+    --name "$CONTAINER_NAME"
+    --no-entry
+    --pull
+  )
+
+  [ "$nvidia" = "1" ] && flags+=(--nvidia)
+
+  flags+=(
+    --init-hooks
+    "[ -f /etc/distrobox-setup-done ] || SETUP_NVIDIA=$nvidia SETUP_CURSOR=$cursor bash $SCRIPT_DIR/setup-dev.sh"
+  )
+
+  distrobox create "${flags[@]}"
+  echo "Created '$CONTAINER_NAME'."
+}
+
+cmd_remove() {
+  distrobox rm --force "$CONTAINER_NAME"
+  echo "Removed '$CONTAINER_NAME'."
+}
+
+cmd_enter() {
+  distrobox enter "$CONTAINER_NAME"
+}
+
+cmd_reinstall() {
+  local passthrough=("$@")
+  cmd_remove 2>/dev/null || true
+  cmd_install "${passthrough[@]}"
+}
+
+cmd_help() {
+  cat <<EOF
+Usage: $(basename "$0") <command> [flags]
+
+Commands:
+  install [flags]     Create the dev container
+  remove              Remove the dev container
+  enter               Enter the dev container
+  reinstall [flags]   Remove and recreate the dev container
+  help                Show this help
+
+Flags (for install/reinstall):
+  --nvidia    Enable NVIDIA GPU support
+  --cursor    Install Cursor editor
+
+Examples:
+  $(basename "$0") install --nvidia --cursor
+  $(basename "$0") reinstall --nvidia
+  $(basename "$0") enter
+EOF
+}
+
+case "${1:-help}" in
+  install)   shift; cmd_install "$@" ;;
+  remove)    cmd_remove ;;
+  enter)     cmd_enter ;;
+  reinstall) shift; cmd_reinstall "$@" ;;
+  help|*)    cmd_help ;;
+esac

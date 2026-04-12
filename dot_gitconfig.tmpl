@@ -1,0 +1,29 @@
+[user]
+{{- if .personal }}
+	name = caipira113
+	email = nya@caipira.link
+	signingkey = {{ onepasswordRead "op://SSH agent/Git (113) Sign SSH/public key" }}
+{{- else }}
+	name = Insung Jo
+	email = {{ .work_email }}
+	signingkey = {{ onepasswordRead (printf "op://Work/%s/public key" .work_signing_key_item) }}
+{{- end }}
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+{{- if eq .chezmoi.os "darwin" }}
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+{{- else }}
+	program = /opt/1Password/op-ssh-sign
+{{- end }}
+
+[init]
+	defaultBranch = main
+
+[core]
+	autocrlf = input
+
+[commit]
+	gpgsign = true

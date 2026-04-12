@@ -1,0 +1,158 @@
+# ═══════════════════════════════════════════════════════════════
+#  Nix integration (conditional)
+# ═══════════════════════════════════════════════════════════════
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+[ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && \
+  . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
+# pkg-config for nix dev libraries
+for p in "$HOME/.nix-profile/lib/pkgconfig" "$HOME/.local/state/nix/profiles/home-manager/home-path/lib/pkgconfig"; do
+  [ -d "$p" ] && export PKG_CONFIG_PATH="${p}${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+done
+
+# ═══════════════════════════════════════════════════════════════
+#  Environment
+# ═══════════════════════════════════════════════════════════════
+export EDITOR="nvim"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# ═══════════════════════════════════════════════════════════════
+#  PATH
+# ═══════════════════════════════════════════════════════════════
+typeset -U path
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.volta/bin"
+  "$HOME/.cargo/bin"
+  "$HOME/fvm/default/bin"
+  $path
+)
+
+# ═══════════════════════════════════════════════════════════════
+#  History
+# ═══════════════════════════════════════════════════════════════
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE="$HOME/.zsh_history"
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_EXPIRE_DUPS_FIRST
+
+# ═══════════════════════════════════════════════════════════════
+#  Options
+# ═══════════════════════════════════════════════════════════════
+setopt AUTO_CD
+
+# ═══════════════════════════════════════════════════════════════
+#  Zinit bootstrap
+# ═══════════════════════════════════════════════════════════════
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+  mkdir -p "$(dirname "$ZINIT_HOME")"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# ═══════════════════════════════════════════════════════════════
+#  Zsh plugins (via zinit)
+# ═══════════════════════════════════════════════════════════════
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-history-substring-search
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+# history-substring-search keybindings (must be after plugin load)
+bindkey '^[[A' history-substring-search-up    # Up arrow
+bindkey '^[[B' history-substring-search-down  # Down arrow
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+
+# ═══════════════════════════════════════════════════════════════
+#  Completion
+# ═══════════════════════════════════════════════════════════════
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ""
+zstyle ':completion:*' group-name ""
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:warnings' format 'No matches found'
+
+# ═══════════════════════════════════════════════════════════════
+#  Keybindings (emacs mode)
+# ═══════════════════════════════════════════════════════════════
+bindkey -e
+
+bindkey '^[[1;5C' forward-word     # Ctrl+Right
+bindkey '^[[1;5D' backward-word    # Ctrl+Left
+bindkey '^[[1;3C' forward-word     # Alt+Right
+bindkey '^[[1;3D' backward-word    # Alt+Left
+bindkey '^[[H' beginning-of-line   # Home
+bindkey '^[[F' end-of-line         # End
+
+# ═══════════════════════════════════════════════════════════════
+#  Aliases
+# ═══════════════════════════════════════════════════════════════
+alias ls="eza --long --header --sort=type --git"
+alias l="ls"
+alias ll="ls -alh"
+alias tree="eza --tree --level 3 --git"
+alias reset="reset ; source ~/.zshrc"
+alias cls="clear"
+
+alias duh="du -h | sort -hr"
+alias dus="du -sh * | sort -hr"
+alias dud="du -d 1 -h | sort -hr"
+
+
+# ═══════════════════════════════════════════════════════════════
+#  Functions
+# ═══════════════════════════════════════════════════════════════
+extract() {
+  if [ -f "$1" ]; then
+    case "$1" in
+      *.tar.bz2)   tar xjf "$1"     ;;
+      *.tar.gz)    tar xzf "$1"     ;;
+      *.bz2)       bunzip2 "$1"     ;;
+      *.rar)       unrar x "$1"     ;;
+      *.gz)        gunzip "$1"      ;;
+      *.tar)       tar xf "$1"      ;;
+      *.tbz2)      tar xjf "$1"     ;;
+      *.tgz)       tar xzf "$1"     ;;
+      *.zip)       unzip "$1"       ;;
+      *.Z)         uncompress "$1"  ;;
+      *.7z)        7z x "$1"        ;;
+      *.tar.xz)    tar xf "$1"      ;;
+      *.tar.zst)   tar --zstd -xf "$1" ;;
+      *)           echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+# ═══════════════════════════════════════════════════════════════
+#  Tool integrations (dynamic — only activates if installed)
+# ═══════════════════════════════════════════════════════════════
+# mise must activate first — it puts tools (starship, etc.) into PATH
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init zsh)"
+else
+  PS1='%F{green}%n@%m%f:%F{blue}%~%f%# '
+fi
+command -v fzf &>/dev/null && eval "$(fzf --zsh)"
+command -v uv &>/dev/null && eval "$(uv generate-shell-completion zsh)"
+command -v uvx &>/dev/null && eval "$(uvx --generate-shell-completion zsh)"
+command -v kubectl &>/dev/null && source <(kubectl completion zsh)
+command -v helm &>/dev/null && source <(helm completion zsh)
+
+# gcloud (mise-managed)
+_gcloud_comp="${MISE_DATA_DIR:-$HOME/.local/share/mise}/installs/gcloud/latest/completion.zsh.inc"
+[ -f "$_gcloud_comp" ] && source "$_gcloud_comp"
+unset _gcloud_comp
