@@ -3,9 +3,9 @@
 {{- $workSigningKeyItem := "" -}}
 {{- if not $personal -}}
 {{-   $workEmail = promptStringOnce . "work_email" "Work email address" -}}
-{{-   $workSigningKeyItem = promptStringOnce . "work_signing_key_item" "1Password item name for work SSH signing key" -}}
+{{-   $workSigningKeyItem = promptStringOnce . "work_signing_key_item" "1Password item name for work SSH signing key (op item list --vault Work --categories 'SSH Key')" -}}
 {{- end -}}
-{{- $opAccount := promptStringOnce . "op_account" "1Password account UUID (leave blank if single account)" -}}
+{{- $opAccount := promptStringOnce . "op_account" "1Password account UUID, blank if single account (op account list)" -}}
 
 [data]
   personal = {{ $personal }}
