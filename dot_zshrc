@@ -138,6 +138,13 @@ extract() {
 # ═══════════════════════════════════════════════════════════════
 #  Tool integrations (dynamic — only activates if installed)
 # ═══════════════════════════════════════════════════════════════
+# When entering a distrobox container the host's mise PATH entries are
+# inherited but pushed to the end, causing stale lookups.  Strip them
+# and reset mise state so activate gets a clean slate.
+if [ -n "$CONTAINER_ID" ]; then
+  path=("${(@)path:#*/.local/share/mise/installs/*}")
+  unset __MISE_DIFF __MISE_SESSION MISE_SHELL
+fi
 # mise must activate first — it puts tools (starship, etc.) into PATH
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
