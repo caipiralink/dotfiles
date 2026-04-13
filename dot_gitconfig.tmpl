@@ -31,7 +31,11 @@
 	defaultBranch = main
 
 [core]
+{{- if eq .chezmoi.os "windows" }}
+	autocrlf = true
+{{- else }}
 	autocrlf = input
+{{- end }}
 {{- if eq .chezmoi.os "windows" }}
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 {{- else if eq .chezmoi.os "linux" }}
