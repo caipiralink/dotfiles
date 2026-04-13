@@ -32,7 +32,9 @@
 
 [core]
 	autocrlf = input
-{{- if eq .chezmoi.os "linux" }}
+{{- if eq .chezmoi.os "windows" }}
+	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+{{- else if eq .chezmoi.os "linux" }}
 {{-   if contains "WSL" .chezmoi.kernel.osrelease }}
 	sshCommand = ssh.exe
 {{-   end }}
