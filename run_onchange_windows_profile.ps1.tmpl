@@ -1,0 +1,11 @@
+{{ if eq .chezmoi.os "windows" -}}
+# hash: {{ include "private_dot_config/powershell/Microsoft.PowerShell_profile.ps1" | sha256sum }}
+$source = Join-Path $env:USERPROFILE ".config" "powershell" "Microsoft.PowerShell_profile.ps1"
+$docs   = [Environment]::GetFolderPath('MyDocuments')
+$dest   = Join-Path $docs "PowerShell" "Microsoft.PowerShell_profile.ps1"
+
+if (Test-Path $source) {
+    New-Item -ItemType Directory -Path (Split-Path $dest) -Force | Out-Null
+    Copy-Item -Path $source -Destination $dest -Force
+}
+{{ end -}}
