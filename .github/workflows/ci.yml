@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  chezmoi-apply:
+    name: chezmoi apply (${{ matrix.name }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Linux x64,   runner: warp-ubuntu-latest-x64-4x }
+          - { name: Linux ARM64, runner: warp-ubuntu-latest-arm64-4x }
+          - { name: Windows x64, runner: warp-windows-latest-x64-4x }
+          - { name: Windows ARM, runner: windows-11-arm }
+    env:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v3
+
+      - uses: jdx/mise-action@v2
+        with:
+          install: false
+
+      - name: Install chezmoi via mise
+        run: mise use -g chezmoi@latest
+
+      - name: chezmoi init and apply (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          chezmoi init --source "${{ github.workspace }}" \
+            --promptBool personal=true \
+            --promptString op_account="" \
+            --apply
+
+      - name: chezmoi init and apply (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          chezmoi init --source "${{ github.workspace }}" `
+            --promptBool personal=true `
+            --promptString op_account="" `
+            --apply
+
+  shellcheck:
+    name: ShellCheck
+    runs-on: warp-ubuntu-latest-x64-4x
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v2
+        with:
+          install: false
+      - name: Install shellcheck via mise
+        run: mise use -g shellcheck@latest
+      - name: Run ShellCheck
+        run: |
+          shellcheck private_dot_config/distrobox/executable_dev
+          shellcheck -s bash dot_zshrc
+
+  lua-lint:
+    name: Lua lint
+    runs-on: warp-ubuntu-latest-x64-4x
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install luacheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq luarocks > /dev/null
+          sudo luarocks install luacheck > /dev/null
+      - name: Run luacheck
+        run: luacheck private_dot_config/nvim/init.lua --globals vim
+
+  pssa:
+    name: PSScriptAnalyzer
+    runs-on: warp-windows-latest-x64-4x
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          $results = Invoke-ScriptAnalyzer -Path private_dot_config/powershell -Recurse -Severity Warning,Error
+          if ($results) {
+            $results | Format-Table -AutoSize
+            exit 1
+          }
+
+  toml-check:
+    name: TOML check
+    runs-on: warp-ubuntu-latest-x64-4x
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v2
+        with:
+          install: false
+      - name: Install taplo via mise
+        run: mise use -g taplo@latest
+      - name: Check TOML files
+        run: taplo check private_dot_config/starship.toml
