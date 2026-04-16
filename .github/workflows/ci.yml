@@ -13,19 +13,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: Linux x64,   runner: warp-ubuntu-latest-x64-4x }
-          - { name: Linux ARM64, runner: warp-ubuntu-latest-arm64-4x }
-          - { name: Windows x64, runner: warp-windows-latest-x64-4x }
-          - { name: Windows ARM, runner: windows-11-arm, op_arch: x64 }
+          - { name: Linux x64,   runner: blacksmith-4vcpu-ubuntu-2404 }
+          - { name: Linux ARM64, runner: blacksmith-4vcpu-ubuntu-2404-arm }
+          - { name: Windows x64, runner: blacksmith-4vcpu-windows-2025 }
     env:
       OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
     steps:
       - uses: actions/checkout@v6
 
       - name: Install 1Password CLI
-        uses: caipiralink/op-install-cli-action@main
-        with:
-          arch: ${{ matrix.op_arch || '' }}
+        uses: 1password/install-cli-action@v3
 
       - uses: jdx/mise-action@v2
         with:
@@ -53,7 +50,7 @@ jobs:
 
   shellcheck:
     name: ShellCheck
-    runs-on: warp-ubuntu-latest-x64-4x
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v6
       - uses: jdx/mise-action@v2
@@ -68,7 +65,7 @@ jobs:
 
   lua-lint:
     name: Lua lint
-    runs-on: warp-ubuntu-latest-x64-4x
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v6
       - name: Install luacheck
@@ -81,7 +78,7 @@ jobs:
 
   pssa:
     name: PSScriptAnalyzer
-    runs-on: warp-windows-latest-x64-4x
+    runs-on: blacksmith-4vcpu-windows-2025
     steps:
       - uses: actions/checkout@v6
       - name: Run PSScriptAnalyzer
@@ -96,7 +93,7 @@ jobs:
 
   toml-check:
     name: TOML check
-    runs-on: warp-ubuntu-latest-x64-4x
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v6
       - uses: jdx/mise-action@v2
