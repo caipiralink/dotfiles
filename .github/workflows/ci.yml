@@ -48,19 +48,12 @@ jobs:
 
       - name: chezmoi init and apply (Linux)
         if: runner.os == 'Linux'
-        run: |
-          chezmoi init --source "${{ github.workspace }}"
-          sed -i 's/\[onepassword\]/[onepassword]\n  mode = "service"/' "$HOME/.config/chezmoi/chezmoi.toml"
-          chezmoi apply
+        run: chezmoi init --source "${{ github.workspace }}" --apply
 
       - name: chezmoi init and apply (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: |
-          chezmoi init --source "${{ github.workspace }}"
-          $cfg = "$env:USERPROFILE\.config\chezmoi\chezmoi.toml"
-          (Get-Content $cfg) -replace '\[onepassword\]', "[onepassword]`nmode = `"service`"" | Set-Content $cfg
-          chezmoi apply
+        run: chezmoi init --source "${{ github.workspace }}" --apply
 
   shellcheck:
     name: ShellCheck
