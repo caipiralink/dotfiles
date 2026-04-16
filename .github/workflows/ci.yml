@@ -48,12 +48,19 @@ jobs:
 
       - name: chezmoi init and apply (Linux)
         if: runner.os == 'Linux'
-        run: chezmoi init --source "${{ github.workspace }}" --apply
+        run: |
+          chezmoi init --source "${{ github.workspace }}"
+          sed -i 's/\[onepassword\]/[onepassword]\n  mode = "service"/' "$HOME/.config/chezmoi/chezmoi.toml"
+          chezmoi apply
 
       - name: chezmoi init and apply (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: chezmoi init --source "${{ github.workspace }}" --apply
+        run: |
+          chezmoi init --source "${{ github.workspace }}"
+          $cfg = "$env:USERPROFILE\.config\chezmoi\chezmoi.toml"
+          (Get-Content $cfg) -replace '\[onepassword\]', "[onepassword]`nmode = `"service`"" | Set-Content $cfg
+          chezmoi apply
 
   shellcheck:
     name: ShellCheck
@@ -73,6 +80,10 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v6
+      - name: Install zsh
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zsh > /dev/null
       - name: Check zsh syntax
         run: zsh -n dot_zshrc
 
