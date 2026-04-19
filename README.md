@@ -1,4 +1,4 @@
-# dotfiles
+<img src="assets/dotfiles-banner.svg" alt="dotfiles" width="100%">
 
 Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
 
