@@ -36,6 +36,7 @@ cmd_install() {
   [ "$nvidia" = "1" ] && flags+=(--nvidia)
 
   distrobox create "${flags[@]}"
+  distrobox enter --name "$CONTAINER_NAME" -- distrobox-export --app claude-desktop-ime
   echo "Created '$CONTAINER_NAME' (image tag: $tag)."
 }
 

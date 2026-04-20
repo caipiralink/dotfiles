@@ -76,7 +76,11 @@ RUN apt-get update && \
       docker-buildx-plugin \
       docker-compose-plugin \
       code \
-      claude-desktop && \
+      claude-desktop \
+      ibus \
+      ibus-hangul \
+      ibus-gtk3 \
+      ibus-gtk4 && \
     rm -rf /var/lib/apt/lists/*
 
 # Emscripten SDK
@@ -94,6 +98,14 @@ RUN FFMPEG_DEB_URL=$(curl -fsSL https://api.github.com/repos/jellyfin/jellyfin-f
     rm -f /tmp/jellyfin-ffmpeg.deb && \
     ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
     ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
+
+# Claude Desktop IME wrapper (IBus environment variables) + desktop entry
+RUN printf '#!/bin/bash\nexec env IBUS_USE_PORTAL=1 GTK_IM_MODULE=ibus QT_IM_MODULE=ibus XMODIFIERS=@im=ibus claude-desktop "$@"\n' \
+      > /usr/local/bin/claude-desktop-ime && \
+    chmod +x /usr/local/bin/claude-desktop-ime && \
+    sed 's|^Exec=.*|Exec=claude-desktop-ime %U|' \
+      /usr/share/applications/claude-desktop.desktop \
+      > /usr/share/applications/claude-desktop-ime.desktop
 
 # 1Password SSH signing wrapper (delegates to host via distrobox-host-exec)
 RUN mkdir -p /opt/1Password && \
