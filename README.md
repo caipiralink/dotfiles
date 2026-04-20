@@ -1,4 +1,4 @@
-<img src="assets/dotfiles-banner.svg" alt="dotfiles" width="100%">
+[![dotfiles](assets/dotfiles-banner.svg)](https://dotfiles.caipira.link/)
 
 Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
 
