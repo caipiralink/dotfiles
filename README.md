@@ -11,7 +11,7 @@ Uses 1Password for SSH keys and Git signing — no secrets stored in the repo.
 Some values (Git identity, 1Password vault references, APT mirror, etc.) are hardcoded for my environment. Fork and adjust before using.
 
 ```bash
-chezmoi init --apply caipira113/dotfiles
+chezmoi init --apply caipiralink/dotfiles
 ```
 
 Chezmoi will ask whether this is a personal or work machine and configure Git identity accordingly.
