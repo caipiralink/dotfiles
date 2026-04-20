@@ -1,0 +1,13 @@
+{
+  "attribution": {
+      "commit": "",
+      "pr": ""
+  },
+  {{ if eq .chezmoi.os "windows" -}}
+  "env": {
+      "CLAUDE_CODE_GIT_BASH_PATH": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+  },
+  {{ end -}}
+  "model": "opus[1m]",
+  "autoUpdatesChannel": "latest"
+}

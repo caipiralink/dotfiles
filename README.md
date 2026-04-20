@@ -27,6 +27,7 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`mise/`](private_dot_config/mise/) | `~/.config/mise/` | 30+ dev tools managed by mise. [→ full list](private_dot_config/mise/README.md) |
 | [`distrobox/`](private_dot_config/distrobox/) | `~/.config/distrobox/` | Debian Trixie dev container provisioning. [→ details](private_dot_config/distrobox/README.md) |
 | [`1Password/`](private_dot_config/1Password/) | `~/.config/1Password/ssh/` | SSH agent vault selection — personal: `SSH agent` only, work: adds `Work` vault. |
+| [`dot_claude/`](dot_claude/) | `~/.claude/` | Claude Code global instructions and settings. `env.CLAUDE_CODE_GIT_BASH_PATH` is Windows-only via template. |
 
 ## License
 
