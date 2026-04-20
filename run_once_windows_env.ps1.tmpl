@@ -3,4 +3,18 @@ $xdgConfig = [System.Environment]::GetEnvironmentVariable('XDG_CONFIG_HOME', 'Us
 if (-not $xdgConfig) {
     [System.Environment]::SetEnvironmentVariable('XDG_CONFIG_HOME', "$HOME\.config", 'User')
 }
+
+{{ if eq .chezmoi.arch "arm64" -}}
+$vsLlvmBin = 'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\Llvm\ARM64\bin'
+{{- else -}}
+$vsLlvmBin = 'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\Llvm\x64\bin'
+{{- end }}
+if (Test-Path $vsLlvmBin) {
+    $userPath = [System.Environment]::GetEnvironmentVariable('Path', 'User')
+    $paths = if ($userPath) { $userPath -split ';' } else { @() }
+    if ($paths -notcontains $vsLlvmBin) {
+        $newPath = if ($userPath) { "$userPath;$vsLlvmBin" } else { $vsLlvmBin }
+        [System.Environment]::SetEnvironmentVariable('Path', $newPath, 'User')
+    }
+}
 {{ end -}}
