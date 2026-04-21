@@ -29,6 +29,18 @@ def main():
 
     home_claude = (Path.home() / ".claude").resolve()
 
+    # Only instruction-like files under ~/.claude/ are considered. Session
+    # state, caches, telemetry, etc. are excluded even when matched by the
+    # user's patterns.
+    ALLOWED_ROOT_FILES = {"CLAUDE.md"}
+    ALLOWED_SUBDIRS = {"rules", "skills", "commands", "agents", "output-styles"}
+
+    def is_instruction_file(rel: Path) -> bool:
+        parts = rel.parts
+        if len(parts) == 1:
+            return parts[0] in ALLOWED_ROOT_FILES
+        return parts[0] in ALLOWED_SUBDIRS and rel.suffix.lower() == ".md"
+
     sections = []
     seen = set()
     for pattern in patterns:
@@ -38,8 +50,10 @@ def main():
                 continue
             real = Path(match).resolve()
             try:
-                real.relative_to(home_claude)
+                rel = real.relative_to(home_claude)
             except ValueError:
+                continue
+            if not is_instruction_file(rel):
                 continue
             if real in seen:
                 continue
