@@ -44,6 +44,7 @@ cmd_install() {
 
   distrobox create "${flags[@]}"
   distrobox enter --name "$CONTAINER_NAME" -- distrobox-export --app claude-desktop-ime
+  distrobox enter --name "$CONTAINER_NAME" -- distrobox-export --app code
   echo "Created '$CONTAINER_NAME' (image tag: $tag)."
 }
 
