@@ -73,6 +73,22 @@ RUN apt-get update && \
       ibus-gtk4 && \
     rm -rf /var/lib/apt/lists/*
 
+# CUDA Toolkit (conditional on NVIDIA, arch-aware)
+RUN if [ "$SETUP_NVIDIA" = "1" ]; then \
+      case "$TARGETARCH" in \
+        amd64) cuda_repo="x86_64";          cuda_pkg="cuda-toolkit-13-2" ;; \
+        arm64) cuda_repo="cross-linux-sbsa"; cuda_pkg="cuda-cross-sbsa-13-2" ;; \
+        *) echo "Unsupported TARGETARCH: $TARGETARCH"; exit 1 ;; \
+      esac && \
+      curl -fsSL -o /tmp/cuda-keyring.deb \
+        "https://developer.download.nvidia.com/compute/cuda/repos/debian13/${cuda_repo}/cuda-keyring_1.1-1_all.deb" && \
+      dpkg -i /tmp/cuda-keyring.deb && \
+      rm -f /tmp/cuda-keyring.deb && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends "$cuda_pkg" && \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
+
 # Emscripten SDK
 RUN git clone https://github.com/emscripten-core/emsdk.git /opt/emsdk && \
     /opt/emsdk/emsdk install latest && \

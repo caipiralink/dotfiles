@@ -19,7 +19,7 @@ Pre-built images are pulled from `ghcr.io/caipiralink/dotfiles/dev`. Tags:
 | Tag | Contents |
 |-----|----------|
 | `latest` | Base image |
-| `nvidia` | + NVIDIA Container Toolkit GPG key |
+| `nvidia` | + NVIDIA Container Toolkit GPG key + CUDA Toolkit 13.2 (arch-aware) |
 
 CI builds both tags daily from the [`Dockerfile`](Dockerfile).
 
