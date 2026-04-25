@@ -28,11 +28,11 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
       > /etc/apt/sources.list.d/vscode.sources
 
 # Claude Desktop repository
-RUN curl -fsSL https://aaddrick.github.io/claude-desktop-debian/KEY.gpg \
-      | gpg --batch --dearmor > /etc/apt/keyrings/claude-desktop.gpg && \
-    chmod 644 /etc/apt/keyrings/claude-desktop.gpg && \
-    printf 'Types: deb\nURIs: https://aaddrick.github.io/claude-desktop-debian\nSuites: stable\nComponents: main\nArchitectures: amd64 arm64\nSigned-By: /etc/apt/keyrings/claude-desktop.gpg\n' \
-      > /etc/apt/sources.list.d/claude-desktop.sources
+RUN curl -fsSL https://pkg.claude-desktop-debian.dev/KEY.gpg \
+      | gpg --batch --dearmor -o /usr/share/keyrings/claude-desktop.gpg && \
+    chmod 644 /usr/share/keyrings/claude-desktop.gpg && \
+    printf 'deb [signed-by=/usr/share/keyrings/claude-desktop.gpg arch=amd64,arm64] https://pkg.claude-desktop-debian.dev stable main\n' \
+      > /etc/apt/sources.list.d/claude-desktop.list
 
 # APT packages
 # hadolint ignore=DL3008
