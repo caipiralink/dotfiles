@@ -34,6 +34,15 @@ RUN curl -fsSL https://pkg.claude-desktop-debian.dev/KEY.gpg \
     printf 'deb [signed-by=/usr/share/keyrings/claude-desktop.gpg arch=amd64,arm64] https://pkg.claude-desktop-debian.dev stable main\n' \
       > /etc/apt/sources.list.d/claude-desktop.list
 
+# Google Chrome repository (amd64 only)
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+        | gpg --batch --dearmor -o /etc/apt/keyrings/google-linux.gpg && \
+      chmod 644 /etc/apt/keyrings/google-linux.gpg && \
+      printf 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-linux.gpg] https://dl.google.com/linux/chrome/deb/ stable main\n' \
+        > /etc/apt/sources.list.d/google-chrome.list; \
+    fi
+
 # APT packages
 # hadolint ignore=DL3008
 RUN apt-get update && \
@@ -62,6 +71,8 @@ RUN apt-get update && \
       libxi-dev \
       libgtk-3-dev \
       aria2 \
+      xdg-utils \
+      xz-utils \
       zstd \
       socat \
       openssh-client \
@@ -72,6 +83,28 @@ RUN apt-get update && \
       ibus-gtk3 \
       ibus-gtk4 && \
     rm -rf /var/lib/apt/lists/*
+
+# Zen Browser
+RUN case "$TARGETARCH" in \
+        amd64) zen_arch="x86_64" ;; \
+        arm64) zen_arch="aarch64" ;; \
+        *) echo "Unsupported TARGETARCH: $TARGETARCH"; exit 1 ;; \
+      esac && \
+    curl -fsSL -o /tmp/zen.tar.xz \
+      "https://github.com/zen-browser/desktop/releases/latest/download/zen.linux-${zen_arch}.tar.xz" && \
+    tar -xJf /tmp/zen.tar.xz -C /opt && \
+    rm -f /tmp/zen.tar.xz && \
+    ln -s /opt/zen/zen /usr/local/bin/zen && \
+    mkdir -p /usr/share/applications && \
+    printf '[Desktop Entry]\nName=Zen Browser\nComment=Browse the Web\nExec=zen %%u\nTerminal=false\nType=Application\nIcon=/opt/zen/browser/chrome/icons/default/default128.png\nCategories=Network;WebBrowser;\nMimeType=text/html;text/xml;application/xhtml+xml;application/xml;x-scheme-handler/http;x-scheme-handler/https;\nStartupWMClass=zen\n' \
+      > /usr/share/applications/zen.desktop
+
+# Google Chrome (amd64 only)
+RUN if [ "$TARGETARCH" = "amd64" ]; then \
+      apt-get update && \
+      apt-get install -y --no-install-recommends google-chrome-stable && \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
 
 # CUDA Toolkit (conditional on NVIDIA, arch-aware)
 RUN if [ "$SETUP_NVIDIA" = "1" ]; then \
@@ -127,9 +160,8 @@ RUN printf '#!/bin/bash\nexec env IBUS_USE_PORTAL=1 GTK_IM_MODULE=ibus QT_IM_MOD
       /usr/share/applications/claude-desktop.desktop \
       > /usr/share/applications/claude-desktop-ime.desktop
 
-# docker and xdg-open delegated to host via distrobox-host-exec
-RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
-    ln -s /usr/bin/distrobox-host-exec /usr/local/bin/xdg-open
+# docker delegated to host; xdg-open is provided by container xdg-utils
+RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/docker
 
 # 1Password SSH signing wrapper (delegates to host via distrobox-host-exec)
 RUN mkdir -p /opt/1Password && \

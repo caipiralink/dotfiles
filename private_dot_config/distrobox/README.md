@@ -30,9 +30,9 @@ CI builds both tags daily from the [`Dockerfile`](Dockerfile).
 - libssl-dev, libicu-dev, libreadline-dev, zlib1g-dev
 - FFmpeg dev libraries + jellyfin-ffmpeg (from GitHub releases)
 - Emscripten SDK (`/opt/emsdk`, activate manually)
-- Visual Studio Code, Claude Desktop, Codex Desktop
-- aria2, zstd, socat
-- `docker`, `xdg-open` delegated to host via `distrobox-host-exec`
+- Visual Studio Code, Google Chrome (amd64 only), Zen Browser, Claude Desktop, Codex Desktop
+- aria2, zstd, socat, xdg-utils
+- `docker` delegated to host via `distrobox-host-exec`; `xdg-open` is provided by container `xdg-utils`
 - 1Password SSH signing wrapper (delegates to host via `distrobox-host-exec`)
 
 ```

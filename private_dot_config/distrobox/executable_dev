@@ -66,6 +66,8 @@ cmd_install() {
   distrobox enter "${enter_flags[@]}" -- distrobox-export --app claude-desktop-ime
   distrobox enter "${enter_flags[@]}" -- distrobox-export --app codex
   distrobox enter "${enter_flags[@]}" -- distrobox-export --app code
+  distrobox enter "${enter_flags[@]}" -- sh -lc 'if [ -f /usr/share/applications/google-chrome.desktop ]; then distrobox-export --app google-chrome; fi'
+  distrobox enter "${enter_flags[@]}" -- distrobox-export --app zen
   echo "Created '$CONTAINER_NAME' (image tag: $tag)."
 }
 
