@@ -3,33 +3,64 @@
 set -eu
 
 repo_url='https://github.com/caipiralink/awesome-codex-subagents.git'
-cache_base="${XDG_CACHE_HOME:-$HOME/.cache}"
-cache_root="$cache_base/codex/agents"
-repo_dir="$cache_root/awesome-codex-subagents"
-source_root="$repo_dir/categories"
 dest_dir="$HOME/.codex/agents"
 manifest="$dest_dir/.awesome-codex-subagents.manifest"
+revision="$dest_dir/.awesome-codex-subagents.revision"
 
-mkdir -p "$cache_root" "$dest_dir"
+mkdir -p "$dest_dir"
 
-if [ -d "$repo_dir/.git" ]; then
-  git -C "$repo_dir" fetch --depth 1 origin
-  git -C "$repo_dir" reset --hard FETCH_HEAD >/dev/null
-elif [ -e "$repo_dir" ]; then
-  echo "Refusing to overwrite non-git path: $repo_dir" >&2
+remote_head="$(git ls-remote "$repo_url" HEAD | awk 'NR == 1 {print $1}')"
+if [ -z "$remote_head" ]; then
+  echo "Could not determine remote HEAD for: $repo_url" >&2
   exit 1
-else
-  git clone --depth 1 "$repo_url" "$repo_dir"
 fi
+
+should_sync=1
+if [ -f "$revision" ] && [ -s "$manifest" ]; then
+  current_head="$(sed -n '1p' "$revision")"
+  if [ "$current_head" = "$remote_head" ]; then
+    should_sync=0
+    while IFS= read -r name; do
+      [ -n "$name" ] || continue
+      if [ ! -f "$dest_dir/$name" ]; then
+        should_sync=1
+        break
+      fi
+    done < "$manifest"
+  fi
+fi
+
+if [ "$should_sync" -eq 0 ]; then
+  exit 0
+fi
+
+if command -v sha256sum >/dev/null 2>&1; then
+  repo_hash="$(printf '%s' "$repo_url" | sha256sum | awk '{print substr($1, 1, 12)}')"
+elif command -v shasum >/dev/null 2>&1; then
+  repo_hash="$(printf '%s' "$repo_url" | shasum -a 256 | awk '{print substr($1, 1, 12)}')"
+else
+  repo_hash="$(printf '%s' "$repo_url" | cksum | awk '{print $1}')"
+fi
+
+tmp_base="${TMPDIR:-/tmp}"
+tmp_base="${tmp_base%/}"
+repo_dir="$(mktemp -d "$tmp_base/codex-agents-${repo_hash}.XXXXXXXXXX")"
+source_root="$repo_dir/categories"
+
+cleanup() {
+  rm -rf "$repo_dir"
+}
+trap cleanup EXIT
+
+git clone --depth 1 "$repo_url" "$repo_dir"
 
 if [ ! -d "$source_root" ]; then
   echo "Missing subagent categories directory: $source_root" >&2
   exit 1
 fi
 
-names_file="$(mktemp)"
-dupes_file="$(mktemp)"
-trap 'rm -f "$names_file" "$dupes_file"' EXIT
+names_file="$repo_dir/.toml-names"
+dupes_file="$repo_dir/.toml-dupes"
 
 find "$source_root" -type f -name '*.toml' -exec basename {} \; | sort > "$names_file"
 if [ ! -s "$names_file" ]; then
@@ -58,4 +89,5 @@ find "$source_root" -type f -name '*.toml' | while IFS= read -r file; do
 done
 
 cp "$names_file" "$manifest"
+printf '%s\n' "$remote_head" > "$revision"
 {{ end -}}
