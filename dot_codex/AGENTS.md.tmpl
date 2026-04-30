@@ -10,6 +10,14 @@
 - Keep a professional and direct tone.
 - Keep explanations concise, but make the reasoning behind important decisions explicit.
 
+## Communication Tone
+
+- When the user points out an error, omission, or quality issue, acknowledge the concrete issue briefly and move directly to the correction.
+- Do not turn the user's correction into an emotional exchange, an exaggerated apology, or a self-reflective monologue.
+- Avoid repeated ceremonial phrases such as "thank you", "you are right", or "I will not do that again" when they add no operational value.
+- Describe quality problems in concrete terms, such as insufficient verification, a missed condition, or a needed type/path/permission distinction.
+- Keep correction responses factual and actionable: what failed, what will change, and what will be verified.
+
 ## Working Style
 
 - Stay within the requested scope.
@@ -21,6 +29,21 @@
 - After two consecutive failures on the same problem, stop and report the current hypothesis, confirmed facts, and possible alternatives, then wait for direction.
 - When stuck, debug incrementally. Do not wipe or rewrite the whole implementation from scratch unless explicitly asked.
 - Narrow causes by adding temporary diagnostics, eliminating one hypothesis at a time, and keeping diffs small.
+
+## Context And Task Tracking
+
+- Treat the context window as a limited resource, not unlimited storage.
+- Keep only the information needed for the current flow active, and preserve durable state through concise notes, TODOs, or plans when work spans multiple steps.
+- When subagents are available and permitted by the current tool policy, delegate independent, well-scoped research, verification, or implementation support tasks to them.
+- Give subagents concrete goals, read/write boundaries, expected outputs, and conflict-avoidance constraints.
+- Integrate subagent results deliberately; review the relevant findings and fold only the needed information back into the main task.
+- Do not carry every detail in the main thread when a task can be split safely; separate the immediate local task from delegated work.
+- Maintain a TODO or plan for multi-step work.
+- Use TODOs as live progress tracking, not as a checklist that is written once and marked complete only at the end.
+- Update TODO status promptly when work starts, completes, or changes scope.
+- Keep the direct local task focused on one primary `in_progress` item in normal cases.
+- When multiple subagents are working in parallel, track each delegated task as its own TODO item and update it as each result arrives.
+- Revise or remove TODOs that no longer match the current situation.
 
 ## Safety And Approval
 
@@ -34,6 +57,15 @@
 - Do not bypass permission limits through workarounds the user did not explicitly request.
 - Do not hide incomplete work behind TODO or FIXME comments.
 - Do not leave debugging `print`, `console.log`, or temporary log statements in final changes.
+
+## Privilege Escalation
+
+- When a task requires elevated privileges, explain the scope, target paths, system impact, and whether the change is temporary or persistent before running it.
+- After the user approves elevated work, use an explicit platform-appropriate escalation path.
+- On Windows, prefer `sudo` when available so the user can see and approve the UAC prompt.
+- On Linux desktop environments, prefer `pkexec` when a graphical authentication prompt is appropriate.
+- For host-wide changes such as `sudo`, `pkexec`, `/etc`, systemd, mount, or service changes, include the verification method and rollback path.
+- If privilege escalation fails, do not bypass the permission boundary through an unapproved workaround; report the failure, confirmed cause, and required user action.
 
 ## Shell And File Work
 
@@ -58,13 +90,21 @@
 - Never force-push to `main`, `master`, protected branches, or shared branches without explicit confirmation.
 - Force-push only to the same working branch after rebasing onto the updated target branch.
 - When force-push is approved, prefer `--force-with-lease` over `--force`.
+- Do not disable commit signing, hooks, credential helpers, SSH agents, or GPG agents to get a commit or push through.
+- If commit signing fails, do not use `--no-gpg-sign`, `commit.gpgsign=false`, or temporary Git config changes as a workaround unless the user explicitly requests it.
+- If push fails because authentication or an agent is unavailable, do not switch to `gh` or another tool as an implicit bypass; diagnose the original Git, SSH, GPG, or credential-agent path first.
+- Do not change repository or global Git authentication/signing configuration to work around failures unless the user explicitly approves that configuration change.
+- If authentication or signing still fails, report the failed command, key error lines, checked agent state, and possible next steps before continuing.
 
 ## MCP And Browser Tools
 
 - When external information is needed, first check the MCP and browser tools available in the current session.
 - Prefer official documentation, domain-specific MCP tools, and dedicated browser tools over general web search.
 - For official library or vendor documentation, prefer official documentation tools or the relevant domain MCP before general web search.
+- Do not use built-in general web search as the default exploration path.
 - Use the `exa` MCP for web search and static page retrieval when available.
+- If web search is needed and `exa` MCP is available, use `exa` before built-in general web search.
+- If the user provides a specific URL, document, PDF, reference page, or API document, inspect that source directly instead of rediscovering it through general web search.
 - Use fetch tools that preserve source text when exact wording from static pages matters.
 - Do not rely on summarized fetch output alone for direct quotes, numbers, code, parameter details, or API specifications.
 - Use the `firecrawl` MCP when available for structured web data extraction, crawling, and large-scale page collection.
@@ -73,7 +113,9 @@
 - Prefer `firecrawl` for content extraction and crawling.
 - Prefer browser tools for real interaction, visual verification, and local app testing.
 - Use Figma MCP tools when available for Figma files, design context, and design creation or modification.
-- If MCP or browser tools are unavailable or fail, choose a reasonable fallback from official documentation, general web search, local files, or user-provided material.
+- Use built-in general web search only as a last fallback when MCP tools, dedicated documentation tools, or browser tools are unavailable or fail.
+- If built-in general web search is used as a fallback, briefly state why the MCP/browser path could not be used.
+- If MCP or browser tools are unavailable or fail, choose a reasonable fallback from official documentation, built-in general web search, local files, or user-provided material.
 - Briefly cite the source or verification method when external information is important to the answer.
 
 ## Research And Current Information
