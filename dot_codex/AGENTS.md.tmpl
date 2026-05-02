@@ -149,6 +149,14 @@
 - If web search is needed and `exa` MCP is available, use `exa` before built-in general web search.
 - If the user provides a specific URL, document, PDF, reference page, or API document, inspect that source directly instead of rediscovering it through general web search.
 - Do not reinterpret requests to scrape, fetch, read, or inspect a source as permission to use built-in general web search.
+- For web pages, prefer `firecrawl`, browser tools, or `exa` over raw HTTP fetch.
+- Use raw HTTP fetch (`curl`, `Invoke-WebRequest`, `wget`, language HTTP clients) only when the target is source-like or response-like content: raw files, code, JSON, XML, RSS, plain text, downloadable assets, API responses, headers, status codes, redirects, or the literal HTTP body.
+- Do not use raw HTTP fetch as the primary extraction path for rendered documentation pages, SPAs, marketing pages, app pages, or sites that may hydrate content client-side.
+- If the page may be JavaScript-rendered and the goal is text/content extraction, use `firecrawl` when available.
+- If the goal is interaction, login, visual state, layout, screenshots, or user-flow verification, use browser tools.
+- If the goal is discovery/search or a quick static source lookup, use `exa` when available.
+- If `firecrawl`, browser tools, or `exa` are not currently visible, use tool discovery when available before falling back to raw fetch or built-in general web search.
+- If raw fetch is used as fallback for a web page, state that it cannot execute JavaScript and may miss rendered content.
 - Use fetch tools that preserve source text when exact wording from static pages matters.
 - Do not rely on summarized fetch output alone for direct quotes, numbers, code, parameter details, or API specifications.
 - Use the `firecrawl` MCP when available for structured web data extraction, crawling, and large-scale page collection.
