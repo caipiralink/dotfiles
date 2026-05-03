@@ -70,6 +70,8 @@ upx = "latest" {{/* TODO: no Windows ARM64 binary available */}}
 uv = "latest"
 {{- end }}
 yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
+yarn = "latest"
+"npm:pnpm" = "latest"
 {{ if ne .chezmoi.os "windows" -}}
 cmake = "latest"
 ninja = "latest"
