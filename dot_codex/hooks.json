@@ -2,6 +2,15 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "mcp__plugin_context-mode_context-mode__ctx_execute|mcp__plugin_context-mode_context-mode__ctx_execute_file|mcp__plugin_context-mode_context-mode__ctx_batch_execute|mcp__context_mode__ctx_execute|mcp__context_mode__ctx_execute_file|mcp__context_mode__ctx_batch_execute",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const main=async()=>{const{homedir}=await import('node:os');const{join}=await import('node:path');const{pathToFileURL}=await import('node:url');process.env.CONTEXT_MODE_CAPTURE_ENV='1';await import(pathToFileURL(join(homedir(),'.context-mode','loader.mjs')).href);};main().catch(()=>process.exit(0));\""
+          }
+        ]
+      },
+      {
         "matcher": "local_shell|shell|shell_command|exec_command|container.exec|Bash|Shell|grep_files|mcp__plugin_context-mode_context-mode__ctx_execute|mcp__plugin_context-mode_context-mode__ctx_execute_file|mcp__plugin_context-mode_context-mode__ctx_batch_execute",
         "hooks": [
           {
