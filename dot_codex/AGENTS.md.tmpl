@@ -173,7 +173,9 @@
 ## Context-Mode Tools
 
 - Treat context-mode as a context-management and indexing layer, not as a replacement for source selection, MCP documentation tools, browser tools, `exa`, or `firecrawl`.
+- Source selection has priority over context management.
 - When context-mode tools are available, prefer them for large-output inspection, read-heavy research, resumed-session recovery, and cases where raw command output would consume excessive context.
+- Do not choose context-mode merely because the output may be large when the source itself requires rendering, interaction, or specialized extraction.
 - Use `ctx_search(sort: "timeline")` after resume, compaction, interruption, or long tool-heavy work when prior exact state may affect the next action.
 - Use `ctx_batch_execute` for batches of commands whose output should be indexed and searched instead of read directly.
 - Use `ctx_execute_file` for large file, log, JSON, XML, CSV, or source analysis when only extracted facts are needed.
@@ -183,8 +185,12 @@
 - Use `ctx_fetch_and_index` only for known URLs when the goal is to keep fetched content out of the context window and query it through `ctx_search`.
 - For web discovery or search, prefer `exa` when available.
 - For JavaScript-rendered documentation, SPAs, app pages, marketing pages, structured crawls, or rendered-page content extraction, prefer `firecrawl` or browser tools according to the existing MCP/browser policy.
+- If `ctx_fetch_and_index` or a raw fetch path returns only a title, navigation, shell HTML, empty content, or incomplete markdown for a documentation page, treat that as a fetch failure rather than partial verification.
+- After detecting a JavaScript-rendered or hydration-dependent page, stop using context-mode fetch for that source and switch to `firecrawl` for rendered content extraction or browser tools for visual or interactive verification.
+- Do not describe title-only, navigation-only, or shell-only fetch results as confirmed official page content.
 - For source-like URLs, API responses, raw files, JSON, XML, RSS, or plain text, `ctx_fetch_and_index` is acceptable when a known URL should be indexed instead of dumping raw output into context.
 - If exact rendered page content matters, do not rely on `ctx_fetch_and_index` alone because it uses fetch plus HTML-to-Markdown conversion and does not execute client-side JavaScript.
+- Use context-mode after the correct source tool has been chosen when indexing or summarizing extracted content is useful.
 - Treat context-mode's bundled `AGENTS.md` as upstream reference material, not as a replacement for this file.
 
 ## Research And Current Information
