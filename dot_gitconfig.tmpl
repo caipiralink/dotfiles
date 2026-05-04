@@ -1,13 +1,8 @@
 [user]
-{{- if .personal }}
-	name = caipira113
-	email = nya@caipira.link
-	signingkey = {{ onepasswordRead "op://SSH agent/kyg4agemt7axtvtbpuq34ckuea/public key" }}
-{{- else }}
-	name = Insung Jo
-	email = {{ .work_email }}
-	signingkey = {{ onepasswordRead (printf "op://Work/%s/public key" .work_signing_key_item) }}
-{{- end }}
+{{- $profileRef := .profile_ref }}
+	name = {{ onepasswordRead (printf "%s/git_name" $profileRef) }}
+	email = {{ onepasswordRead (printf "%s/git_email" $profileRef) }}
+	signingkey = {{ onepasswordRead (onepasswordRead (printf "%s/git_signing_key_ref" $profileRef)) }}
 
 [gpg]
 	format = ssh

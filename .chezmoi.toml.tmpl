@@ -1,16 +1,13 @@
 {{- $personal := promptBoolOnce . "personal" "Is this a personal machine" -}}
-{{- $workEmail := "" -}}
-{{- $workSigningKeyItem := "" -}}
-{{- if not $personal -}}
-{{-   $workEmail = promptStringOnce . "work_email" "Work email address" -}}
-{{-   $workSigningKeyItem = promptStringOnce . "work_signing_key_item" "1Password item name for work SSH signing key (op item list --vault Work --categories 'SSH Key')" -}}
+{{- $profileRef := "op://Dotfiles/Work Profile" -}}
+{{- if $personal -}}
+{{-   $profileRef = "op://Dotfiles/Personal Profile" -}}
 {{- end -}}
 {{- $opAccount := promptStringOnce . "op_account" "1Password account UUID, blank if single account (op account list)" -}}
 
 [data]
   personal = {{ $personal }}
-  work_email = {{ $workEmail | quote }}
-  work_signing_key_item = {{ $workSigningKeyItem | quote }}
+  profile_ref = {{ $profileRef | quote }}
 
 [onepassword]
   prompt = false

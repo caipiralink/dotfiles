@@ -41,8 +41,7 @@ jobs:
           cat > "$HOME/.config/chezmoi/chezmoi.toml" << 'EOF'
           [data]
             personal = true
-            work_email = ""
-            work_signing_key_item = ""
+            profile_ref = "op://Dotfiles/Personal Profile"
             op_account = ""
           EOF
 
