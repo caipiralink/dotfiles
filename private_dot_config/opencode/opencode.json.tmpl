@@ -1,8 +1,55 @@
+{{- $shellEnvJSON := "{}" -}}
+{{- if not (env "CI") -}}
+{{-   $shellEnvJSON = onepasswordRead (printf "%s/shell_env_json" .profile_ref) -}}
+{{- end -}}
+{{- $shellEnv := mustFromJson $shellEnvJSON -}}
+{{- $exaAPIKey := "" -}}
+{{- if hasKey $shellEnv "EXA_API_KEY" -}}
+{{-   $exaAPIKey = index $shellEnv "EXA_API_KEY" -}}
+{{- end -}}
+{{- $context7APIKey := "" -}}
+{{- if hasKey $shellEnv "CONTEXT7_API_KEY" -}}
+{{-   $context7APIKey = index $shellEnv "CONTEXT7_API_KEY" -}}
+{{- end -}}
+{{- $firecrawlAPIKey := "" -}}
+{{- if hasKey $shellEnv "FIRECRAWL_API_KEY" -}}
+{{-   $firecrawlAPIKey = index $shellEnv "FIRECRAWL_API_KEY" -}}
+{{- end -}}
 {
   "$schema": "https://opencode.ai/config.json",
   "shell": {{ if eq .chezmoi.os "windows" }}"pwsh"{{ else }}"zsh"{{ end }},
   "plugin": ["@morphllm/opencode-morph-plugin"],
   "instructions": [
     "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
-  ]
+  ],
+  "mcp": {
+    "exa": {
+      "type": "remote",
+      "url": "https://mcp.exa.ai/mcp",
+      "enabled": true{{ if $exaAPIKey }},
+      "oauth": false,
+      "headers": {
+        "x-api-key": "{env:EXA_API_KEY}"
+      }{{ end }}
+    }{{ if $context7APIKey }},
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      },
+      "enabled": true
+    }{{ end }}{{ if $firecrawlAPIKey }},
+    "firecrawl": {
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/{env:FIRECRAWL_API_KEY}/v2/mcp",
+      "enabled": true
+    }{{ end }}{{ if $exaAPIKey }},
+    "websets": {
+      "type": "remote",
+      "url": "https://websetsmcp.exa.ai/mcp?exaApiKey={env:EXA_API_KEY}",
+      "enabled": true,
+      "oauth": false
+    }{{ end }}
+  }
 }
