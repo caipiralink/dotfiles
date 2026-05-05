@@ -20,8 +20,7 @@
   "shell": {{ if eq .chezmoi.os "windows" }}"pwsh"{{ else }}"zsh"{{ end }},
   "plugin": [
     "@morphllm/opencode-morph-plugin",
-    "@khalilgharbaoui/opencode-claude-code-plugin",
-    "git+https://github.com/charfeng1/opencode-ralph-loop.git"
+    "@khalilgharbaoui/opencode-claude-code-plugin"
   ],
   "instructions": [
     "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
