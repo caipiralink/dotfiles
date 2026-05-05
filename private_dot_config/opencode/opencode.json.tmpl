@@ -25,6 +25,17 @@
   "instructions": [
     "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
   ],
+  "provider": {
+    "claude-code": {
+      "options": {
+        "bridgeOpencodeMcp": true,
+        "strictMcpConfig": true,
+        "skipPermissions": true,
+        "proxyTools": ["Bash", "Edit", "Write", "WebFetch"],
+        "webSearch": {{ if $exaAPIKey }}"exa_web_search_exa"{{ else }}"disabled"{{ end }}
+      }
+    }
+  },
   "mcp": {
     "exa": {
       "type": "remote",
