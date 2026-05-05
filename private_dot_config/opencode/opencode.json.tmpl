@@ -20,7 +20,8 @@
   "shell": {{ if eq .chezmoi.os "windows" }}"pwsh"{{ else }}"zsh"{{ end }},
   "plugin": [
     "@morphllm/opencode-morph-plugin",
-    "@khalilgharbaoui/opencode-claude-code-plugin"
+    "@khalilgharbaoui/opencode-claude-code-plugin",
+    "opencode-supermemory@latest"
   ],
   "instructions": [
     "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
