@@ -25,11 +25,9 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`shell/env.zsh.tmpl`](private_dot_config/shell/env.zsh.tmpl) / [`powershell/env.ps1.tmpl`](private_dot_config/powershell/env.ps1.tmpl) | `~/.config/shell/env.zsh` / `~/.config/powershell/env.ps1` | Session environment variables rendered from the selected 1Password profile's `shell_env_json`. |
 | [`starship.toml`](private_dot_config/starship.toml) | `~/.config/starship.toml` | Minimal — only overrides Node.js detection to `package.json` / `.node-version` / `node_modules`. |
 | [`dot_gitconfig.tmpl`](dot_gitconfig.tmpl) | `~/.gitconfig` | SSH commit signing via 1Password. Personal/work identity templated by chezmoi. Signing program path adapts to OS. |
-| [`dot_codex/`](dot_codex/) | `~/.codex/` | Codex global user instructions. |
 | [`nvim/`](private_dot_config/nvim/) | `~/.config/nvim/` | Single-file Neovim config with lazy.nvim. [→ details](private_dot_config/nvim/README.md) |
 | [`mise/`](private_dot_config/mise/) | `~/.config/mise/` | 30+ dev tools managed by mise. [→ full list](private_dot_config/mise/README.md) |
 | [`distrobox/`](private_dot_config/distrobox/) | `~/.config/distrobox/` | Debian Trixie dev container provisioning. [→ details](private_dot_config/distrobox/README.md) |
-| [`dot_claude/`](dot_claude/) | `~/.claude/` | Claude Code global instructions, settings (templated per OS), and a `SessionStart` hook that re-injects the user's `CLAUDE.md` when a project's `claudeMdExcludes` suppresses it. |
 | [`1Password/`](private_dot_config/1Password/) | `~/.config/1Password/ssh/` | SSH agent vault selection (Linux/macOS) — personal: `SSH agent` only, work: adds `Work` vault. |
 | [`AppData/Local/1Password/`](AppData/Local/1Password/) | `%LOCALAPPDATA%\1Password\config\ssh\` | Same SSH agent vault selection on Windows. |
 | [`dot_local/private_bin/`](dot_local/private_bin/) | `~/.local/bin/` | Convenience symlinks — e.g. `dev` → `~/.config/distrobox/dev`. |

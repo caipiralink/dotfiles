@@ -46,8 +46,6 @@ neovim = "latest"
 node = "lts"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@openai/codex" = "latest"
-"npm:context-mode" = "latest"
-"npm:@morphllm/morphmcp" = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
 "github:anomalyco/opencode" = { version = "latest", asset_pattern = "opencode-windows-arm64.zip" }
 {{- else -}}
