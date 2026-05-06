@@ -16,6 +16,7 @@ done
 #  Environment
 # ═══════════════════════════════════════════════════════════════
 export EDITOR="nvim"
+export MORPH_COMPACT_CONTEXT_THRESHOLD="0.45"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 

@@ -2,6 +2,7 @@
 #  Environment
 # ═══════════════════════════════════════════════════════════════════
 $env:EDITOR = "nvim"
+$env:MORPH_COMPACT_CONTEXT_THRESHOLD = "0.45"
 $_dotfilesEnv = Join-Path $HOME ".config\powershell\env.ps1"
 if (Test-Path $_dotfilesEnv) {
     . $_dotfilesEnv

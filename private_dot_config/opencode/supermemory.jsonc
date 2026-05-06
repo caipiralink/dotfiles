@@ -1,3 +1,4 @@
 {
-  "userContainerTag": "opencode_user_caipira"
+  "userContainerTag": "opencode_user_caipira",
+  "compactionThreshold": 0.51
 }
