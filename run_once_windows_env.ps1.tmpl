@@ -23,4 +23,5 @@ if (Test-Path $vsLlvmBin) {
 [System.Environment]::SetEnvironmentVariable('CMAKE_C_COMPILER_LAUNCHER', 'sccache', 'User')
 [System.Environment]::SetEnvironmentVariable('CMAKE_CXX_COMPILER_LAUNCHER', 'sccache', 'User')
 [System.Environment]::SetEnvironmentVariable('SCCACHE_DIR', "$env:USERPROFILE\.cache\sccache", 'User')
+[System.Environment]::SetEnvironmentVariable('MORPH_COMPACT_CONTEXT_THRESHOLD', '0.45', 'User')
 {{ end -}}
