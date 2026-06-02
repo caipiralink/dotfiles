@@ -44,7 +44,7 @@ if (Get-Command mise -ErrorAction SilentlyContinue) {
     & mise activate pwsh | Out-String | Invoke-Expression
 }
 
-if (Get-Command starship -ErrorAction SilentlyContinue) {
+if ((Get-Command starship -ErrorAction SilentlyContinue) -and $env:TERM -ne 'dumb') {
     Invoke-Expression (&starship init powershell)
 }
 

@@ -159,7 +159,7 @@ fi
 # mise must activate first — it puts tools (starship, etc.) into PATH
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
-if command -v starship &>/dev/null; then
+if command -v starship &>/dev/null && [ "${TERM:-}" != "dumb" ]; then
   eval "$(starship init zsh)"
 else
   PS1='%F{green}%n@%m%f:%F{blue}%~%f%# '
