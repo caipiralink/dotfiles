@@ -54,6 +54,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           build-args: |
             SETUP_NVIDIA=${{ matrix.variant.nvidia }}
+          pull: true
+          no-cache: true
 
       - name: Build and push by digest
         if: github.event_name != 'pull_request'
@@ -64,6 +66,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           build-args: |
             SETUP_NVIDIA=${{ matrix.variant.nvidia }}
+          pull: true
+          no-cache: true
           provenance: false
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
