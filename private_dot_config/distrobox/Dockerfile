@@ -27,13 +27,6 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
     printf 'Types: deb\nURIs: https://packages.microsoft.com/repos/code\nSuites: stable\nComponents: main\nArchitectures: amd64 arm64 armhf\nSigned-By: /etc/apt/keyrings/microsoft.gpg\n' \
       > /etc/apt/sources.list.d/vscode.sources
 
-# Claude Desktop repository
-RUN curl -fsSL https://pkg.claude-desktop-debian.dev/KEY.gpg \
-      | gpg --batch --dearmor -o /usr/share/keyrings/claude-desktop.gpg && \
-    chmod 644 /usr/share/keyrings/claude-desktop.gpg && \
-    printf 'deb [signed-by=/usr/share/keyrings/claude-desktop.gpg arch=amd64,arm64] https://pkg.claude-desktop-debian.dev stable main\n' \
-      > /etc/apt/sources.list.d/claude-desktop.list
-
 # Google Chrome repository (amd64 only)
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
@@ -77,7 +70,6 @@ RUN apt-get update && \
       socat \
       openssh-client \
       code \
-      claude-desktop \
       ibus \
       ibus-hangul \
       ibus-gtk3 \
@@ -138,20 +130,6 @@ RUN FFMPEG_DEB_URL=$(curl -fsSL https://api.github.com/repos/jellyfin/jellyfin-f
     ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
     ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
 
-# Codex Desktop (latest release, arch-aware)
-RUN case "$TARGETARCH" in \
-      amd64|arm64) codex_arch="$TARGETARCH" ;; \
-      *) echo "Unsupported TARGETARCH: $TARGETARCH"; exit 1 ;; \
-    esac && \
-    CODEX_DEB_URL=$(curl -fsSL https://api.github.com/repos/Haleclipse/CodexDesktop-Rebuild/releases/latest \
-      | grep -oP '"browser_download_url":\s*"\K[^"]*codex_[^"]*_'${codex_arch}'\.deb' | head -1) && \
-    test -n "${CODEX_DEB_URL}" && \
-    curl -fsSL -o /tmp/codex.deb "${CODEX_DEB_URL}" && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends /tmp/codex.deb && \
-    rm -f /tmp/codex.deb && \
-    rm -rf /var/lib/apt/lists/*
-
 # OpenCode Desktop (latest release, amd64 only)
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       OPENCODE_DEB_URL=$(curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest \
@@ -163,14 +141,6 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
       rm -f /tmp/opencode-desktop.deb && \
       rm -rf /var/lib/apt/lists/*; \
     fi
-
-# Claude Desktop IME wrapper (IBus environment variables) + desktop entry
-RUN printf '#!/bin/bash\nexec env IBUS_USE_PORTAL=1 GTK_IM_MODULE=ibus QT_IM_MODULE=ibus XMODIFIERS=@im=ibus claude-desktop "$@"\n' \
-      > /usr/local/bin/claude-desktop-ime && \
-    chmod +x /usr/local/bin/claude-desktop-ime && \
-    sed 's|^Exec=.*|Exec=claude-desktop-ime %U|' \
-      /usr/share/applications/claude-desktop.desktop \
-      > /usr/share/applications/claude-desktop-ime.desktop
 
 # docker delegated to host; xdg-open is provided by container xdg-utils
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/docker
