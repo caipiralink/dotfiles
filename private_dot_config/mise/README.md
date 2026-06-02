@@ -4,10 +4,10 @@ All dev tools managed by [mise](https://mise.jdx.dev/). Available both on host a
 
 ## Tools
 
-**Languages** — go, rust, python 3.12, node (lts), bun, deno, java (zulu-21)
+**Languages** — go, rust, python 3.12, node (lts), bun, deno, java (zulu-21), gradle
 
-**CLI** — bat, blacksmith, btop, eza, fd, fzf, hexyl, oha, ripgrep, croc, rclone, tmux, upx, uv, yt-dlp, lazygit
+**CLI** — bat, blacksmith, btop, eza, fd, fzf, hexyl, oha, ripgrep, croc, rclone, tmux, upx, uv, yt-dlp, lazygit, protobuf
 
-**Infra** — aws, gcloud, kubectl, helm
+**Infra** — aws, gcloud, kubectl, helm, supabase, vercel, northflank
 
 **Meta** — chezmoi, claude-code, git-lfs, neovim, opencode, starship

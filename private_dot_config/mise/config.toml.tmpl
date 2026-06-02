@@ -34,6 +34,7 @@ gcloud = "latest"
 gh = "latest"
 git-lfs = "latest"
 go = "latest"
+gradle = "latest"
 helm = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
 "cargo:hexyl" = "latest"
@@ -46,6 +47,7 @@ lazygit = "latest"
 neovim = "latest"
 node = "lts"
 "npm:@anthropic-ai/claude-code" = "latest"
+"npm:@northflank/cli" = "latest"
 "npm:@openai/codex" = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
 "github:anomalyco/opencode" = { version = "latest", asset_pattern = "opencode-windows-arm64.zip" }
@@ -57,6 +59,7 @@ opencode = "latest"
 {{- else -}}
 oha = "latest"
 {{- end }}
+protobuf = "latest"
 python = "3.12"
 rclone = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
@@ -68,6 +71,7 @@ rust = "latest"
 sccache = "latest"
 sing-box = "latest"
 starship = "latest"
+supabase = "latest"
 tmux = "latest"
 upx = "latest" {{/* TODO: no Windows ARM64 binary available */}}
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
@@ -75,6 +79,7 @@ upx = "latest" {{/* TODO: no Windows ARM64 binary available */}}
 {{- else -}}
 uv = "latest"
 {{- end }}
+vercel = "latest"
 yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
 yarn = "latest"
 "npm:pnpm" = "latest"
