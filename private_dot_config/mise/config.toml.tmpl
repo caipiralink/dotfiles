@@ -46,9 +46,7 @@ kubectl = "latest"
 lazygit = "latest"
 neovim = "latest"
 node = "lts"
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:@northflank/cli" = "latest"
-"npm:@openai/codex" = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
 "github:anomalyco/opencode" = { version = "latest", asset_pattern = "opencode-windows-arm64.zip" }
 {{- else -}}
