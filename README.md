@@ -28,6 +28,8 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`nvim/`](private_dot_config/nvim/) | `~/.config/nvim/` | Single-file Neovim config with lazy.nvim. [→ details](private_dot_config/nvim/README.md) |
 | [`mise/`](private_dot_config/mise/) | `~/.config/mise/` | 30+ dev tools managed by mise. [→ full list](private_dot_config/mise/README.md) |
 | [`distrobox/`](private_dot_config/distrobox/) | `~/.config/distrobox/` | Debian Trixie dev container provisioning. [→ details](private_dot_config/distrobox/README.md) |
+| [`devin/`](private_dot_config/devin/) | `~/.config/devin/` | Devin AI agent config — AGENTS.md (instructions) and config.json (settings). Windows: `%APPDATA%\devin\`. |
+| [`dot_claude/`](dot_claude/) | `~/.claude/` | Claude Code config — CLAUDE.md (instructions) and settings.json. |
 | [`1Password/`](private_dot_config/1Password/) | `~/.config/1Password/ssh/` | SSH agent vault selection (Linux/macOS) — personal: `SSH agent` only, work: adds `Work` vault. |
 | [`AppData/Local/1Password/`](AppData/Local/1Password/) | `%LOCALAPPDATA%\1Password\config\ssh\` | Same SSH agent vault selection on Windows. |
 | [`dot_local/private_bin/`](dot_local/private_bin/) | `~/.local/bin/` | Convenience symlinks — e.g. `dev` → `~/.config/distrobox/dev`. |
@@ -39,6 +41,8 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`run_once_windows_env.ps1.tmpl`](run_once_windows_env.ps1.tmpl) | One-time Windows user env setup: `XDG_CONFIG_HOME`, sccache (`RUSTC_WRAPPER`, `CMAKE_{C,CXX}_COMPILER_LAUNCHER`, `SCCACHE_DIR`), and appending the VS Build Tools LLVM `bin` (arch-aware) to `PATH`. |
 | [`run_onchange_windows_shell_env.ps1.tmpl`](run_onchange_windows_shell_env.ps1.tmpl) | Syncs `shell_env_json` into Windows User environment variables for GUI apps and broadcasts an environment change notification. |
 | [`run_onchange_windows_profile.ps1.tmpl`](run_onchange_windows_profile.ps1.tmpl) | Copies the managed PowerShell profile to both `Documents\PowerShell\` (PS 7) and `Documents\WindowsPowerShell\` (PS 5). |
+| [`run_onchange_setup-mcp.sh.tmpl`](run_onchange_setup-mcp.sh.tmpl) | Registers MCP servers (from `.chezmoidata.yaml`) into Devin and Claude Code via CLI. Linux/macOS. |
+| [`run_onchange_setup-mcp.ps1.tmpl`](run_onchange_setup-mcp.ps1.tmpl) | Same MCP server registration for Windows (PowerShell). |
 
 ## License
 
