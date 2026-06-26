@@ -1,0 +1,22 @@
+mcp_servers:
+  stdio:
+    context7:
+      command: "npx"
+      args:
+        - "-y"
+        - "@upstash/context7-mcp"
+        - "--api-key"
+        - "${env:CONTEXT7_API_KEY}"
+    heroui-react:
+      command: "npx"
+      args:
+        - "-y"
+        - "@heroui/react-mcp@latest"
+    heroui-native:
+      command: "npx"
+      args:
+        - "-y"
+        - "@heroui/native-mcp@latest"
+  http:
+    deepwiki:
+      url: "https://mcp.deepwiki.com/mcp"
