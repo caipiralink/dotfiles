@@ -27,7 +27,6 @@
 - Stay within the requested scope. Do not make unrelated refactors or formatting cleanup.
 - Do not add comments, docstrings, README files, or documentation unless explicitly requested.
 - Do not claim work is complete without verification. Run the relevant build, tests, lint, or type checks.
-- After two consecutive failures on the same problem, stop and report the current hypothesis, confirmed facts, and possible alternatives, then wait for direction.
 - When stuck, debug incrementally. Do not wipe or rewrite the whole implementation from scratch.
 
 ## Guard Rails
