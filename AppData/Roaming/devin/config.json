@@ -4,6 +4,7 @@
     "setup_complete": true
   },
   "theme_mode": "dark",
+  "attribution": false,
   "read_config_from": {
     "cursor": false,
     "windsurf": false,
