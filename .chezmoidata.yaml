@@ -20,3 +20,5 @@ mcp_servers:
   http:
     deepwiki:
       url: "https://mcp.deepwiki.com/mcp"
+    figma:
+      url: "https://mcp.figma.com/mcp"
