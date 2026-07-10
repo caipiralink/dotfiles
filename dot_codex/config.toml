@@ -7,6 +7,7 @@ sandbox_mode = "danger-full-access"
 approval_policy = "never"
 
 [features]
+hooks = true
 image_generation = false
 apps = false
 
@@ -44,3 +45,10 @@ url = "https://mcp.deepwiki.com/mcp"
 [mcp_servers.figma]
 url = "https://mcp.figma.com/mcp"
 auth = "oauth"
+
+[marketplaces.mem0-plugins]
+source_type = "git"
+source = "https://github.com/mem0ai/mem0.git"
+
+[plugins."mem0@mem0-plugins"]
+enabled = true
