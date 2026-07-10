@@ -28,6 +28,8 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`nvim/`](private_dot_config/nvim/) | `~/.config/nvim/` | Single-file Neovim config with lazy.nvim. [→ details](private_dot_config/nvim/README.md) |
 | [`mise/`](private_dot_config/mise/) | `~/.config/mise/` | 30+ dev tools managed by mise. [→ full list](private_dot_config/mise/README.md) |
 | [`distrobox/`](private_dot_config/distrobox/) | `~/.config/distrobox/` | Debian Trixie dev container provisioning. [→ details](private_dot_config/distrobox/README.md) |
+| [`dot_deepagents/private_config.toml`](dot_deepagents/private_config.toml) | `~/.deepagents/config.toml` | Deepagents Code model, provider, startup, and agent selection. |
+| [`dot_deepagents/agent/AGENTS.md`](dot_deepagents/agent/AGENTS.md) | `~/.deepagents/agent/AGENTS.md` | Deepagents Code personal instructions and user preferences. |
 | [`1Password/`](private_dot_config/1Password/) | `~/.config/1Password/ssh/` | SSH agent vault selection (Linux/macOS) — personal: `SSH agent` only, work: adds `Work` vault. |
 | [`AppData/Local/1Password/`](AppData/Local/1Password/) | `%LOCALAPPDATA%\1Password\config\ssh\` | Same SSH agent vault selection on Windows. |
 | [`dot_local/private_bin/`](dot_local/private_bin/) | `~/.local/bin/` | Convenience symlinks — e.g. `dev` → `~/.config/distrobox/dev`. |
