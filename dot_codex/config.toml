@@ -3,6 +3,9 @@ model_reasoning_effort = "xhigh"
 model_provider = "sakana"
 model_catalog_json = "~/.codex/fugu.json"
 
+sandbox_mode = "danger-full-access"
+approval_policy = "never"
+
 [features]
 image_generation = false
 apps = false
