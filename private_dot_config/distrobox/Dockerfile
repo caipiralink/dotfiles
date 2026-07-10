@@ -130,18 +130,6 @@ RUN FFMPEG_DEB_URL=$(curl -fsSL https://api.github.com/repos/jellyfin/jellyfin-f
     ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
     ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
 
-# OpenCode Desktop (latest release, amd64 only)
-RUN if [ "$TARGETARCH" = "amd64" ]; then \
-      OPENCODE_DEB_URL=$(curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest \
-        | grep -oP '"browser_download_url":\s*"\K[^"]*opencode-desktop-linux-amd64\.deb' | head -1) && \
-      test -n "${OPENCODE_DEB_URL}" && \
-      curl -fsSL -o /tmp/opencode-desktop.deb "${OPENCODE_DEB_URL}" && \
-      apt-get update && \
-      apt-get install -y --no-install-recommends /tmp/opencode-desktop.deb && \
-      rm -f /tmp/opencode-desktop.deb && \
-      rm -rf /var/lib/apt/lists/*; \
-    fi
-
 # docker delegated to host; xdg-open is provided by container xdg-utils
 RUN ln -s /usr/bin/distrobox-host-exec /usr/local/bin/docker
 
