@@ -12,4 +12,4 @@ All dev tools managed by [mise](https://mise.jdx.dev/). Available both on host a
 
 **Package managers** — yarn, pnpm
 
-**Meta** — chezmoi, gh, git-lfs, neovim, starship, deepagents-code
+**Meta** — chezmoi, gh, git-lfs, neovim, starship
