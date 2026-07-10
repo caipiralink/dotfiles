@@ -22,7 +22,7 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 |---|---|---|
 | [`dot_zshrc`](dot_zshrc) | `~/.zshrc` | Zsh with [Zinit](https://github.com/zdharma-continuum/zinit) — completions, autosuggestions, syntax highlighting. `eza` aliases, lazy tool activation (mise, starship, fzf, uv/uvx, kubectl, helm, gcloud). |
 | [`powershell/`](private_dot_config/powershell/) | `~/.config/powershell/` | PowerShell 7 profile — PSReadLine, `eza` aliases, mise/starship/kubectl/helm activation, fzf keybindings. Distributed to PS 5 and PS 7 profile paths by a chezmoi script. |
-| [`shell/env.zsh.tmpl`](private_dot_config/shell/env.zsh.tmpl) / [`powershell/env.ps1.tmpl`](private_dot_config/powershell/env.ps1.tmpl) | `~/.config/shell/env.zsh` / `~/.config/powershell/env.ps1` | Static session environment variables plus values rendered from the selected 1Password profile's `shell_env_json`. |
+| [`shell/env.zsh.tmpl`](private_dot_config/shell/env.zsh.tmpl) / [`powershell/env.ps1.tmpl`](private_dot_config/powershell/env.ps1.tmpl) | `~/.config/shell/env.zsh` / `~/.config/powershell/env.ps1` | Session environment variables rendered from the selected 1Password profile's `shell_env_json`. |
 | [`starship.toml`](private_dot_config/starship.toml) | `~/.config/starship.toml` | Minimal — only overrides Node.js detection to `package.json` / `.node-version` / `node_modules`. |
 | [`dot_gitconfig.tmpl`](dot_gitconfig.tmpl) | `~/.gitconfig` | SSH commit signing via 1Password. Personal/work identity templated by chezmoi. Signing program path adapts to OS. |
 | [`nvim/`](private_dot_config/nvim/) | `~/.config/nvim/` | Single-file Neovim config with lazy.nvim. [→ details](private_dot_config/nvim/README.md) |

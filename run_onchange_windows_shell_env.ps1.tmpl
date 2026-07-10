@@ -5,8 +5,6 @@
 {{- end -}}
 {{- $shellEnv := mustFromJson $shellEnvJSON -}}
 $managed = [ordered]@{
-    'UV_PRERELEASE' = 'allow'
-    'UV_INDEX_STRATEGY' = 'unsafe-best-match'
 {{- range $key := keys $shellEnv | sortAlpha }}
 {{- $value := index $shellEnv $key -}}
 {{- if not (regexMatch "^[A-Za-z_][A-Za-z0-9_]*$" $key) -}}
