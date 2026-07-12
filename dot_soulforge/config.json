@@ -1,6 +1,7 @@
 {
   "defaultModel": "sakana/fugu-ultra",
   "defaultForgeMode": "auto",
+  "coAuthorCommits": false,
   "routerRules": [],
   "editor": {
     "command": "nvim",
