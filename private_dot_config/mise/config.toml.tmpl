@@ -39,7 +39,6 @@ kubectl = "latest"
 lazygit = "latest"
 neovim = "latest"
 node = "lts"
-"npm:@openai/codex" = "latest"
 "npm:@northflank/cli" = "latest"
 {{ if and (eq .chezmoi.os "windows") (eq .chezmoi.arch "arm64") -}}
 "cargo:oha" = "latest"
@@ -68,8 +67,6 @@ vercel = "latest"
 yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
 yarn = "latest"
 "npm:pnpm" = "latest"
-"npm:@proxysoul/soulforge" = { version = "latest", bun_args = "--trust" }
-
 [settings]
 
 [settings.npm]
