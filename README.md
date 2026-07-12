@@ -28,7 +28,6 @@ Chezmoi will ask whether this is a personal or work machine and configure Git id
 | [`nvim/`](private_dot_config/nvim/) | `~/.config/nvim/` | Single-file Neovim config with lazy.nvim. [→ details](private_dot_config/nvim/README.md) |
 | [`mise/`](private_dot_config/mise/) | `~/.config/mise/` | 30+ dev tools managed by mise. [→ full list](private_dot_config/mise/README.md) |
 | [`distrobox/`](private_dot_config/distrobox/) | `~/.config/distrobox/` | Debian Trixie dev container provisioning. [→ details](private_dot_config/distrobox/README.md) |
-| [`dot_codex/`](dot_codex/) | `~/.codex/` | Codex CLI config — Sakana provider, Fugu model catalog, MCP servers, and personal AGENTS instructions. API key via `SAKANA_API_KEY`. |
 | [`dot_cursor/`](dot_cursor/) | `~/.cursor/` | Cursor MCP servers — Context7, HeroUI React/Native, DeepWiki, and Figma. Context7 API key via `CONTEXT7_API_KEY`. |
 | [`1Password/`](private_dot_config/1Password/) | `~/.config/1Password/ssh/` | SSH agent vault selection (Linux/macOS) — personal: `SSH agent` only, work: adds `Work` vault. |
 | [`AppData/Local/1Password/`](AppData/Local/1Password/) | `%LOCALAPPDATA%\1Password\config\ssh\` | Same SSH agent vault selection on Windows. |
