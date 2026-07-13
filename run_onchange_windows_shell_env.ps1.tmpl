@@ -6,12 +6,17 @@
 {{- $shellEnv := mustFromJson $shellEnvJSON -}}
 $managed = [ordered]@{
 {{- range $key := keys $shellEnv | sortAlpha }}
-{{- $value := index $shellEnv $key -}}
+{{- $rawValue := index $shellEnv $key -}}
 {{- if not (regexMatch "^[A-Za-z_][A-Za-z0-9_]*$" $key) -}}
 {{-   fail (printf "invalid shell_env_json key: %s" $key) -}}
 {{- end -}}
-{{- if not (kindIs "string" $value) -}}
-{{-   fail (printf "shell_env_json value for %s must be a string" $key) -}}
+{{- $value := "" -}}
+{{- if kindIs "string" $rawValue -}}
+{{-   $value = $rawValue -}}
+{{- else if kindIs "bool" $rawValue -}}
+{{-   $value = printf "%v" $rawValue -}}
+{{- else -}}
+{{-   fail (printf "shell_env_json value for %s must be a string; quote it in 1Password (e.g. \"true\" or \"8080\"), got %s" $key (kindOf $rawValue)) -}}
 {{- end }}
     '{{ $key }}' = '{{ $value | replace "'" "''" }}'
 {{- end }}
