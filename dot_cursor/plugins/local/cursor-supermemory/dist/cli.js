@@ -29808,15 +29808,24 @@ function createClient(apiKey, containerTag = "cursor") {
 }
 
 // src/mcp-server.ts
+function getWorkspaceRoot() {
+  const workspaceRoot = process.env.SUPERMEMORY_WORKSPACE_ROOT?.trim();
+  if (workspaceRoot && !workspaceRoot.includes("${"))
+    return workspaceRoot;
+  return process.cwd();
+}
 function getAuth() {
-  const config2 = loadConfig();
+  const workspaceRoot = getWorkspaceRoot();
+  const config2 = loadConfig(workspaceRoot);
   const apiKey = getApiKey(config2);
   if (!apiKey)
     throw new Error("Not authenticated. Run `cursor-supermemory login` to connect.");
   return {
     apiKey,
     userTag: getUserTag(config2),
-    projectTag: getProjectTag(process.cwd(), config2)
+    projectTag: getProjectTag(workspaceRoot, config2),
+    workspaceRoot,
+    config: config2
   };
 }
 function resolveContainer(auth, container) {
@@ -29833,9 +29842,8 @@ async function startMcpServer() {
     description: "Show the current supermemory configuration — effective settings, resolved container tags, and config file paths.",
     inputSchema: {}
   }, async () => {
-    const cwd = process.cwd();
-    const config2 = loadConfig(cwd);
     const auth = getAuth();
+    const { config: config2, workspaceRoot } = auth;
     return {
       content: [
         {
@@ -29854,7 +29862,7 @@ async function startMcpServer() {
               project: auth.projectTag
             },
             configFiles: {
-              project: getProjectConfigPath(cwd),
+              project: getProjectConfigPath(workspaceRoot),
               global: GLOBAL_CONFIG_PATH
             }
           }, null, 2)
@@ -29877,9 +29885,9 @@ async function startMcpServer() {
     const filtered = Object.fromEntries(Object.entries(updates).filter(([, v]) => v !== undefined));
     if (Object.keys(filtered).length === 0)
       throw new Error("No config values provided.");
-    writeConfig(filtered, scope);
-    const cwd = process.cwd();
-    const filePath = scope === "project" ? getProjectConfigPath(cwd) : GLOBAL_CONFIG_PATH;
+    const workspaceRoot = getWorkspaceRoot();
+    writeConfig(filtered, scope, workspaceRoot);
+    const filePath = scope === "project" ? getProjectConfigPath(workspaceRoot) : GLOBAL_CONFIG_PATH;
     return {
       content: [{ type: "text", text: `Config updated (${scope}): ${filePath}
 ${JSON.stringify(filtered, null, 2)}` }]

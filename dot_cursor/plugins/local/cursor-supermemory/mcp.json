@@ -5,7 +5,10 @@
       "args": [
         "${userHome}/.cursor/plugins/local/cursor-supermemory/dist/cli.js",
         "mcp"
-      ]
+      ],
+      "env": {
+        "SUPERMEMORY_WORKSPACE_ROOT": "${workspaceFolder}"
+      }
     }
   }
 }
