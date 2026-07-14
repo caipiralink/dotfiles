@@ -1,0 +1,93 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "models": {
+    "large": {
+      "provider": "sakana",
+      "model": "fugu-ultra",
+      "reasoning_effort": "xhigh"
+    },
+    "small": {
+      "provider": "sakana",
+      "model": "fugu",
+      "reasoning_effort": "xhigh"
+    }
+  },
+  "providers": {
+    "sakana": {
+      "id": "sakana",
+      "name": "Sakana API",
+      "type": "openai-compat",
+      "base_url": "https://api.sakana.ai/v1",
+      "api_key": "${SAKANA_API_KEY:?set SAKANA_API_KEY}",
+      "models": [
+        {
+          "id": "fugu",
+          "name": "Fugu",
+          "cost_per_1m_in": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out_cached": 0,
+          "context_window": 1000000,
+          "default_max_tokens": 10000,
+          "can_reason": true,
+          "reasoning_levels": ["high", "xhigh", "max"],
+          "default_reasoning_effort": "xhigh",
+          "supports_attachments": true
+        },
+        {
+          "id": "fugu-ultra",
+          "name": "Fugu Ultra",
+          "cost_per_1m_in": 7.5,
+          "cost_per_1m_out": 37.5,
+          "cost_per_1m_in_cached": 0.75,
+          "cost_per_1m_out_cached": 0,
+          "context_window": 1000000,
+          "default_max_tokens": 10000,
+          "can_reason": true,
+          "reasoning_levels": ["high", "xhigh", "max"],
+          "default_reasoning_effort": "xhigh",
+          "supports_attachments": true
+        }
+      ]
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": { "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY" }
+    },
+    "heroui-react": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@heroui/react-mcp@latest"]
+    },
+    "heroui-native": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@heroui/native-mcp@latest"]
+    },
+    "firecrawl": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": { "FIRECRAWL_API_KEY": "$FIRECRAWL_API_KEY" }
+    },
+    "deepwiki": {
+      "type": "http",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    }
+  },
+  "options": {
+    "attribution": {
+      "trailer_style": "none",
+      "generated_with": false
+    },
+    "disable_metrics": true
+  }
+}
