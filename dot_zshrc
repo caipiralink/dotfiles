@@ -139,9 +139,14 @@ extract() {
   fi
 }
 
-# Crush with all permission prompts skipped (yolo) by default. Use only in trusted dirs.
+# Bare `crush` starts a session with permission prompts skipped (yolo); any
+# args (subcommands like `crush logs`) are proxied through untouched.
 crush() {
-  command crush --yolo "$@"
+  if [ "$#" -eq 0 ]; then
+    command crush --yolo
+  else
+    command crush "$@"
+  fi
 }
 
 # ═══════════════════════════════════════════════════════════════
