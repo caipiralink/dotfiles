@@ -24,6 +24,13 @@
         "@heroui/native-mcp@latest"
       ]
     },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${env:FIRECRAWL_API_KEY}"
+      }
+    },
     "deepwiki": {
       "url": "https://mcp.deepwiki.com/mcp"
     },
