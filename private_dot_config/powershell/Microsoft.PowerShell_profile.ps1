@@ -37,6 +37,14 @@ if (Get-Command eza -ErrorAction SilentlyContinue) {
     function tree { eza --tree --level 3 --git @args }
 }
 
+# Crush with all permission prompts skipped (yolo) by default. Use only in trusted dirs.
+if (Get-Command crush -CommandType Application -ErrorAction SilentlyContinue) {
+    function crush {
+        $exe = (Get-Command crush -CommandType Application | Select-Object -First 1).Source
+        & $exe --yolo @args
+    }
+}
+
 # ═══════════════════════════════════════════════════════════════════
 #  Tool integrations (dynamic — only activates if installed)
 # ═══════════════════════════════════════════════════════════════════
