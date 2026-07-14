@@ -74,9 +74,10 @@
       "args": ["-y", "firecrawl-mcp"],
       "env": { "FIRECRAWL_API_KEY": "$FIRECRAWL_API_KEY" }
     },
-    "deepwiki": {
-      "type": "http",
-      "url": "https://mcp.deepwiki.com/mcp"
+    "codewiki": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "codewiki-mcp@latest"]
     },
     "figma": {
       "type": "http",
