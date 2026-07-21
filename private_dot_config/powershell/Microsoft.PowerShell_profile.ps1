@@ -37,19 +37,6 @@ if (Get-Command eza -ErrorAction SilentlyContinue) {
     function tree { eza --tree --level 3 --git @args }
 }
 
-# Bare `crush` starts a session with permission prompts skipped (yolo); any
-# args (subcommands like `crush logs`) are proxied through untouched.
-if (Get-Command crush -CommandType Application -ErrorAction SilentlyContinue) {
-    function crush {
-        $exe = (Get-Command crush -CommandType Application | Select-Object -First 1).Source
-        if ($args.Count -eq 0) {
-            & $exe --yolo
-        } else {
-            & $exe @args
-        }
-    }
-}
-
 # ═══════════════════════════════════════════════════════════════════
 #  Tool integrations (dynamic — only activates if installed)
 # ═══════════════════════════════════════════════════════════════════
