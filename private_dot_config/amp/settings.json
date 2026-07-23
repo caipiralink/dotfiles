@@ -1,6 +1,7 @@
 {
   "amp.git.commit.ampThread.enabled": false,
   "amp.git.commit.coauthor.enabled": false,
+  "amp.remoteThreadCreation.enabled": true,
   "amp.updates.mode": "auto",
   "amp.mcpServers": {
     "context7": {
